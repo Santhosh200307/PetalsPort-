@@ -8,8 +8,8 @@ import { Reveal } from "@/components/ScrollReveal";
 
 const API = `${process.env.REACT_APP_BACKEND_URL || "http://localhost:5000"}/api`;
 
-// Vibrant, premium, and disciplined decorative flowers image
-const FLORAL_IMAGE = "https://images.unsplash.com/photo-1596436889106-be35e843f974?crop=entropy&cs=srgb&fm=jpg&q=85";
+// Disciplined, high-end, vibrant decorative floral arrangement
+const FLORAL_IMAGE = "https://images.unsplash.com/photo-1507290439931-a861b5a38200?crop=entropy&cs=srgb&fm=jpg&q=85";
 
 export default function Auth() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -87,12 +87,12 @@ export default function Auth() {
         <div className="absolute inset-0 bg-[#1A2F24]">
           <img 
             src={FLORAL_IMAGE} 
-            alt="Vibrant Decorative Flowers Background" 
+            alt="Disciplined Decorative Flowers Background" 
             className="w-full h-full object-cover opacity-85 transition-transform duration-[2.5s] ease-out hover:scale-105"
           />
         </div>
         {/* Cinematic Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1A2F24] via-[#1A2F24]/45 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1A2F24] via-[#1A2F24]/40 to-transparent" />
         
         {/* Panel Brand/Content */}
         <div className="absolute bottom-16 left-16 right-16 text-[#FAF8F5] z-10">
@@ -112,9 +112,9 @@ export default function Auth() {
       {/* Forms Side Panel */}
       <div className="w-full lg:w-1/2 min-h-[calc(100vh-80px)] lg:min-h-screen flex items-center justify-center py-16 px-6 relative bg-[#FAF8F5]">
         
-        {/* Extremely subtle (1.5% opacity) floral background watermark */}
+        {/* Extremely faint, disciplined watermark background (0.8% opacity) */}
         <div 
-          className="absolute inset-0 opacity-[0.015] pointer-events-none"
+          className="absolute inset-0 opacity-[0.008] pointer-events-none"
           style={{
             backgroundImage: `url(${FLORAL_IMAGE})`,
             backgroundSize: "cover",
