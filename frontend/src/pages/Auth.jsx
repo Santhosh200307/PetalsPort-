@@ -112,9 +112,9 @@ export default function Auth() {
       {/* Forms Side Panel */}
       <div className="w-full lg:w-1/2 min-h-[calc(100vh-80px)] lg:min-h-screen flex items-center justify-center py-16 px-6 relative bg-[#FAF8F5]">
         
-        {/* Extremely faint, disciplined watermark background (0.8% opacity) */}
+        {/* Faint, disciplined watermark background (4% opacity) */}
         <div 
-          className="absolute inset-0 opacity-[0.008] pointer-events-none"
+          className="absolute inset-0 opacity-[0.04] pointer-events-none"
           style={{
             backgroundImage: `url(${FLORAL_IMAGE})`,
             backgroundSize: "cover",
