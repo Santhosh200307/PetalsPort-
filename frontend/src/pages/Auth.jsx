@@ -8,7 +8,7 @@ import { Reveal } from "@/components/ScrollReveal";
 
 const API = `${process.env.REACT_APP_BACKEND_URL || "http://localhost:5000"}/api`;
 
-// Disciplined, high-end, vibrant decorative floral arrangement
+// Disciplined, high-end, vibrant decorative flower image
 const FLORAL_IMAGE = "https://images.unsplash.com/photo-1507290439931-a861b5a38200?crop=entropy&cs=srgb&fm=jpg&q=85";
 
 export default function Auth() {
@@ -79,64 +79,43 @@ export default function Auth() {
   };
 
   return (
-    <main data-testid="auth-page" className="min-h-screen w-full flex flex-col lg:flex-row bg-[#FAF8F5] pt-20 lg:pt-0 overflow-hidden">
+    <main data-testid="auth-page" className="min-h-screen w-full relative flex items-center justify-center py-24 px-6 bg-[#1A2F24] overflow-hidden">
       
-      {/* Visual Side Panel (Desktop only) */}
-      <div className="hidden lg:block lg:w-1/2 relative h-screen overflow-hidden">
-        {/* Background Image */}
-        <div className="absolute inset-0 bg-[#1A2F24]">
-          <img 
-            src={FLORAL_IMAGE} 
-            alt="Disciplined Decorative Flowers Background" 
-            className="w-full h-full object-cover opacity-85 transition-transform duration-[2.5s] ease-out hover:scale-105"
-          />
-        </div>
-        {/* Cinematic Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1A2F24] via-[#1A2F24]/40 to-transparent" />
-        
-        {/* Panel Brand/Content */}
-        <div className="absolute bottom-16 left-16 right-16 text-[#FAF8F5] z-10">
-          <Reveal>
-            <div className="text-xs uppercase tracking-[0.35em] text-[#E5E0D8] opacity-80 mb-4">PetalsPort Procurement</div>
-            <h2 className="font-serif-display text-4xl md:text-5xl leading-tight text-[#FAF8F5]">
-              Freshly Sourced. <br />
-              <span className="italic font-light">Elegantly Delivered.</span>
-            </h2>
-            <p className="mt-6 text-sm text-[#E5E0D8] max-w-sm leading-relaxed font-light opacity-90">
-              Join local florists, wedding venues, and corporate accounts accessing fresh premium stems.
-            </p>
-          </Reveal>
-        </div>
+      {/* Full-screen Floral Background Layer (faint & disciplined) */}
+      <div className="absolute inset-0 z-0">
+        <img 
+          src={FLORAL_IMAGE} 
+          alt="Full screen Floral Background" 
+          className="w-full h-full object-cover opacity-[0.20]"
+        />
+        {/* Soft dark vignette filter for contrast */}
+        <div className="absolute inset-0 bg-[#1A2F24]/40 backdrop-blur-[1px]" />
       </div>
 
-      {/* Forms Side Panel */}
-      <div className="w-full lg:w-1/2 min-h-[calc(100vh-80px)] lg:min-h-screen flex items-center justify-center py-16 px-6 relative bg-[#FAF8F5]">
+      {/* Centered Login Card Container */}
+      <div className="w-full max-w-md relative z-10">
         
-        {/* Faint, disciplined watermark background (4% opacity) */}
-        <div 
-          className="absolute inset-0 opacity-[0.04] pointer-events-none"
-          style={{
-            backgroundImage: `url(${FLORAL_IMAGE})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        />
-
-        <div className="w-full max-w-md relative z-10">
+        {/* Form Container (Frosted glassmorphism to show the background flower textures behind the fields) */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="bg-[#FAF8F5]/90 backdrop-blur-xl border border-[#E5E0D8]/40 rounded-2xl p-8 md:p-10 shadow-2xl"
+        >
           <Reveal>
             <div className="text-center mb-8">
               <span className="text-xs uppercase tracking-[0.25em] text-[#5C7065]">Account Portal</span>
               <h1 className="font-serif-display text-4xl mt-3 text-[#1A2F24]">
-                Step into the <span className="italic">bloom</span>.
+                Step into the <span className="italic text-[#8C2131]">bloom</span>.
               </h1>
-              <p className="mt-3 text-sm text-[#5C7065]">
+              <p className="mt-3 text-sm text-[#5C7065] leading-relaxed">
                 Access wholesale pricing, saved quotes, and track orders.
               </p>
             </div>
           </Reveal>
 
           {/* Tab Headers */}
-          <div className="flex border-b border-[#E5E0D8] mb-8 relative">
+          <div className="flex border-b border-[#E5E0D8]/70 mb-8 relative">
             <button
               onClick={() => {
                 setIsSignUp(false);
@@ -173,22 +152,21 @@ export default function Auth() {
             </button>
           </div>
 
-          {/* Form Container (translucent & blurred to allow very subtle watermark blend) */}
+          {/* Form */}
           <motion.div
             key={isSignUp ? "signup" : "signin"}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="bg-white/80 backdrop-blur-md border border-[#E5E0D8] rounded-2xl p-8 shadow-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
           >
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-5">
               {isSignUp && (
                 <div>
-                  <label className="block text-xs uppercase tracking-wider text-[#5C7065] font-bold mb-2">
+                  <label className="block text-[10px] uppercase tracking-wider text-[#5C7065] font-bold mb-1.5">
                     Full Name
                   </label>
                   <div className="relative flex items-center">
-                    <User size={16} className="absolute left-4 text-[#5C7065]" />
+                    <User size={14} className="absolute left-4 text-[#5C7065]" />
                     <input
                       type="text"
                       name="name"
@@ -203,11 +181,11 @@ export default function Auth() {
               )}
 
               <div>
-                <label className="block text-xs uppercase tracking-wider text-[#5C7065] font-bold mb-2">
+                <label className="block text-[10px] uppercase tracking-wider text-[#5C7065] font-bold mb-1.5">
                   Email Address
                 </label>
                 <div className="relative flex items-center">
-                  <Mail size={16} className="absolute left-4 text-[#5C7065]" />
+                  <Mail size={14} className="absolute left-4 text-[#5C7065]" />
                   <input
                     type="email"
                     name="email"
@@ -221,11 +199,11 @@ export default function Auth() {
               </div>
 
               <div>
-                <label className="block text-xs uppercase tracking-wider text-[#5C7065] font-bold mb-2">
+                <label className="block text-[10px] uppercase tracking-wider text-[#5C7065] font-bold mb-1.5">
                   Password
                 </label>
                 <div className="relative flex items-center">
-                  <Lock size={16} className="absolute left-4 text-[#5C7065]" />
+                  <Lock size={14} className="absolute left-4 text-[#5C7065]" />
                   <input
                     type={showPassword ? "text" : "password"}
                     name="password"
@@ -240,7 +218,7 @@ export default function Auth() {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-4 text-[#5C7065] hover:text-[#1A2F24] outline-none"
                   >
-                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
                   </button>
                 </div>
               </div>
@@ -248,20 +226,20 @@ export default function Auth() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-[#1A2F24] text-[#FAF8F5] hover:bg-[#2C4A3A] disabled:bg-[#5C7065] rounded-full py-3.5 px-6 font-medium text-sm flex items-center justify-center gap-2 transition-colors duration-300 relative group overflow-hidden mt-8"
+                className="w-full bg-[#1A2F24] text-[#FAF8F5] hover:bg-[#2C4A3A] disabled:bg-[#5C7065] rounded-full py-3.5 px-6 font-medium text-sm flex items-center justify-center gap-2 transition-colors duration-300 relative group overflow-hidden mt-6"
               >
                 {loading ? (
                   <span className="w-5 h-5 border-2 border-[#FAF8F5] border-t-transparent rounded-full animate-spin" />
                 ) : (
                   <>
                     <span>{isSignUp ? "Create Account" : "Sign In"}</span>
-                    <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+                    <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
                   </>
                 )}
               </button>
             </form>
           </motion.div>
-        </div>
+        </motion.div>
       </div>
     </main>
   );
