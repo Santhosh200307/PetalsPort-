@@ -1,0 +1,79 @@
+{
+  "theme": "light",
+  "archetype": "1_and_5_hybrid",
+  "archetype_description": "Organic & Earthy mixed with Luxury. High-end editorial feel with cinematic scrolling.",
+  "colors": {
+    "background": "#FAF8F5",
+    "surface": "#FFFFFF",
+    "primary": "#1A2F24",
+    "primary_hover": "#2C4A3A",
+    "accent": "#8C2131",
+    "text_main": "#1A2F24",
+    "text_muted": "#5C7065",
+    "border": "#E5E0D8"
+  },
+  "typography": {
+    "headings": "Cormorant Garamond",
+    "body": "Outfit",
+    "h1": "text-5xl md:text-6xl tracking-tighter leading-none font-medium",
+    "h2": "text-4xl md:text-5xl tracking-tight leading-tight",
+    "h3": "text-2xl md:text-3xl leading-snug",
+    "body_text": "text-base md:text-lg leading-relaxed",
+    "overline": "text-xs uppercase tracking-[0.2em] font-bold"
+  },
+  "spacing_and_layout": {
+    "section_padding": "py-24 md:py-32",
+    "container": "max-w-7xl mx-auto px-6 md:px-12",
+    "grid_bento": "grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12"
+  },
+  "motion": {
+    "global": "Lenis smooth scrolling is mandatory for the entire app wrapper. It provides the high-class cinematic feel requested.",
+    "scroll_reveal": "framer-motion whileInView={{ y: 0, opacity: 1 }} initial={{ y: 40, opacity: 0 }} transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }} viewport={{ once: true, margin: '-100px' }}",
+    "parallax": "Use framer-motion useScroll and useTransform for slow image y-axis movement within fixed overflow-hidden containers to simulate parallax.",
+    "hover": "Images scale up slightly on hover transition-transform duration-700 ease-out hover:scale-105"
+  },
+  "components": {
+    "navbar": "Glassmorphism: backdrop-blur-xl bg-[#FAF8F5]/80 border-b border-[#E5E0D8]/50 sticky top-0 z-50.",
+    "hero": "Cinematic full-height (min-h-[90vh]). Large background image with max bg-black/40 overlay. Text is center-aligned, massive serif heading.",
+    "marquee": "react-fast-marquee. Low contrast: bg-[#E5E0D8] text-[#1A2F24]. Font: Cormorant Garamond, text-xl, gap-32. Drifting text like 'Freshly Sourced • Wholesale Pricing • Pan-India Delivery'",
+    "buttons": "rounded-full px-8 py-3 transition-colors duration-300. Primary: bg-[#1A2F24] text-[#FAF8F5] hover:bg-[#2C4A3A]. Secondary: border border-[#1A2F24] text-[#1A2F24] hover:bg-[#1A2F24] hover:text-[#FAF8F5].",
+    "cards": "Flat surfaces with minimal borders. bg-white border border-[#E5E0D8] p-6. No heavy drop shadows, use subtle hover lifts (-translate-y-1)."
+  },
+  "media": {
+    "hero_arch": {
+      "url": "https://images.unsplash.com/photo-1561848355-890d054dc55a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwxfHxlbGVnYW50JTIwd2VkZGluZyUyMGZsb3JhbCUyMGFycmFuZ2VtZW50fGVufDB8fHx8MTc4MTU4NzUxM3ww&ixlib=rb-4.1.0&q=85",
+      "description": "Elegant white and beige floral arrangement. Use for the main hero background."
+    },
+    "wholesale_market": {
+      "url": "https://images.unsplash.com/photo-1600104197373-c07cc35e4f61?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzR8MHwxfHNlYXJjaHwzfHx3aG9sZXNhbGUlMjBmcmVzaCUyMGZsb3dlcnMlMjBtYXJrZXR8ZW58MHx8fHwxNzgxNTg3NTEzfDA&ixlib=rb-4.1.0&q=85",
+      "description": "Vibrant wholesale flower market. Use for the 'About' or 'Wholesale Pricing' section."
+    },
+    "wedding_category": {
+      "url": "https://images.unsplash.com/photo-1710587384835-0f3de33d8042?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwzfHxlbGVnYW50JTIwd2VkZGluZyUyMGZsb3JhbCUyMGFycmFuZ2VtZW50fGVufDB8fHx8MTc4MTU4NzUxM3ww&ixlib=rb-4.1.0&q=85",
+      "description": "Elegant wedding floral setup. Use for the Wedding category bento card."
+    },
+    "product_roses": {
+      "url": "https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA3MDR8MHwxfHNlYXJjaHwxfHxiZWF1dGlmdWwlMjBib3VxdWV0JTIwcm9zZXN8ZW58MHx8fHwxNzgxNTg3NTEzfDA&ixlib=rb-4.1.0&q=85",
+      "description": "Pink roses. Use for product thumbnails or featured products."
+    }
+  },
+  "dependencies_to_install": [
+    "lenis",
+    "framer-motion",
+    "react-fast-marquee",
+    "lucide-react"
+  ],
+  "pages_to_build": [
+    "Home (Hero, Marquee, Categories Grid, Featured Products, Wholesale CTA)",
+    "Catalog (Filters, Product Grid)",
+    "Product Detail (Images, Bulk vs Retail pricing, Add to Cart)",
+    "Bulk Quote Request Form",
+    "About/Story",
+    "Cart & Checkout (Razorpay UI representation)"
+  ],
+  "critical_rules": [
+    "All interactive and key informational elements MUST include a data-testid attribute in kebab-case based on role (e.g., data-testid='add-to-cart-button').",
+    "Never use purple or teal. Stick strictly to the defined color palette.",
+    "Do NOT use Inter, Roboto, or generic sans for headings. Use Cormorant Garamond."
+  ]
+}
