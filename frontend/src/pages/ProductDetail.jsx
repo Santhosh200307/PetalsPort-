@@ -11,7 +11,7 @@ export default function ProductDetail() {
   const navigate = useNavigate();
   const product = getProductById(id);
   const { addItem } = useCart();
-  const [qty, setQty] = useState(product?.minWholesale || 10);
+  const [qty, setQty] = useState(1);
   const [mode, setMode] = useState("retail");
 
   if (!product) {

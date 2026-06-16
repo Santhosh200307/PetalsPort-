@@ -27,6 +27,7 @@ function App() {
               <Route path="/product/:id" element={<ProductDetail />} />
               <Route path="/category/:slug" element={<CategoryShowcase />} />
               <Route path="/quote" element={<BulkQuote />} />
+              <Route path="/bulk-quote" element={<BulkQuote />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/cart" element={<Cart />} />
