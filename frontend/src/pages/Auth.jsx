@@ -8,7 +8,8 @@ import { Reveal } from "@/components/ScrollReveal";
 
 const API = `${process.env.REACT_APP_BACKEND_URL || "http://localhost:5000"}/api`;
 
-const FLORAL_IMAGE = "https://images.unsplash.com/photo-1561848355-890d054dc55a?crop=entropy&cs=srgb&fm=jpg&q=85";
+// Vibrant, premium, and disciplined decorative flowers image
+const FLORAL_IMAGE = "https://images.unsplash.com/photo-1596436889106-be35e843f974?crop=entropy&cs=srgb&fm=jpg&q=85";
 
 export default function Auth() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -86,12 +87,12 @@ export default function Auth() {
         <div className="absolute inset-0 bg-[#1A2F24]">
           <img 
             src={FLORAL_IMAGE} 
-            alt="Luxury Floral Background" 
+            alt="Vibrant Decorative Flowers Background" 
             className="w-full h-full object-cover opacity-85 transition-transform duration-[2.5s] ease-out hover:scale-105"
           />
         </div>
         {/* Cinematic Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1A2F24] via-[#1A2F24]/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1A2F24] via-[#1A2F24]/45 to-transparent" />
         
         {/* Panel Brand/Content */}
         <div className="absolute bottom-16 left-16 right-16 text-[#FAF8F5] z-10">
@@ -111,9 +112,9 @@ export default function Auth() {
       {/* Forms Side Panel */}
       <div className="w-full lg:w-1/2 min-h-[calc(100vh-80px)] lg:min-h-screen flex items-center justify-center py-16 px-6 relative bg-[#FAF8F5]">
         
-        {/* Subtle Background Watermark Layer for Floral texture */}
+        {/* Extremely subtle (1.5% opacity) floral background watermark */}
         <div 
-          className="absolute inset-0 opacity-[0.03] pointer-events-none"
+          className="absolute inset-0 opacity-[0.015] pointer-events-none"
           style={{
             backgroundImage: `url(${FLORAL_IMAGE})`,
             backgroundSize: "cover",
@@ -172,13 +173,13 @@ export default function Auth() {
             </button>
           </div>
 
-          {/* Form Container */}
+          {/* Form Container (translucent & blurred to allow very subtle watermark blend) */}
           <motion.div
             key={isSignUp ? "signup" : "signin"}
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="bg-white border border-[#E5E0D8] rounded-2xl p-8 shadow-sm"
+            className="bg-white/80 backdrop-blur-md border border-[#E5E0D8] rounded-2xl p-8 shadow-sm"
           >
             <form onSubmit={handleSubmit} className="space-y-6">
               {isSignUp && (
@@ -195,7 +196,7 @@ export default function Auth() {
                       onChange={handleInputChange}
                       placeholder="Enter your name"
                       required
-                      className="w-full bg-[#FAF8F5] border border-[#E5E0D8] rounded-full py-3 pl-12 pr-4 text-sm outline-none text-[#1A2F24] focus:border-[#1A2F24] transition-colors"
+                      className="w-full bg-[#FAF8F5]/80 border border-[#E5E0D8] rounded-full py-3 pl-12 pr-4 text-sm outline-none text-[#1A2F24] focus:border-[#1A2F24] transition-colors"
                     />
                   </div>
                 </div>
@@ -214,7 +215,7 @@ export default function Auth() {
                     onChange={handleInputChange}
                     placeholder="name@example.com"
                     required
-                    className="w-full bg-[#FAF8F5] border border-[#E5E0D8] rounded-full py-3 pl-12 pr-4 text-sm outline-none text-[#1A2F24] focus:border-[#1A2F24] transition-colors"
+                    className="w-full bg-[#FAF8F5]/80 border border-[#E5E0D8] rounded-full py-3 pl-12 pr-4 text-sm outline-none text-[#1A2F24] focus:border-[#1A2F24] transition-colors"
                   />
                 </div>
               </div>
@@ -232,7 +233,7 @@ export default function Auth() {
                     onChange={handleInputChange}
                     placeholder="••••••••"
                     required
-                    className="w-full bg-[#FAF8F5] border border-[#E5E0D8] rounded-full py-3 pl-12 pr-12 text-sm outline-none text-[#1A2F24] focus:border-[#1A2F24] transition-colors"
+                    className="w-full bg-[#FAF8F5]/80 border border-[#E5E0D8] rounded-full py-3 pl-12 pr-12 text-sm outline-none text-[#1A2F24] focus:border-[#1A2F24] transition-colors"
                   />
                   <button
                     type="button"
