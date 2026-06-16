@@ -12,6 +12,7 @@ import BulkQuote from "@/pages/BulkQuote";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
 import Cart from "@/pages/Cart";
+import Auth from "@/pages/Auth";
 import { Toaster } from "@/components/ui/sonner";
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/cart" element={<Cart />} />
+              <Route path="/login" element={<Auth />} />
             </Routes>
             <Footer />
           </SmoothScroll>
