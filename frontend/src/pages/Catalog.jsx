@@ -1,22 +1,49 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { PRODUCTS, CATEGORIES } from "@/lib/data";
 import { Reveal } from "@/components/ScrollReveal";
 import { Search, SlidersHorizontal } from "lucide-react";
+import axios from "axios";
 
 export default function Catalog() {
   const [category, setCategory] = useState("all");
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState("featured");
+  const [productsList, setProductsList] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL || "http://localhost:5000"}/api/products`);
+        setProductsList(response.data);
+      } catch (err) {
+        console.error("Error fetching products:", err);
+        // Fallback to local static data
+        setProductsList(PRODUCTS.map(p => ({ ...p, inStock: p.inStock !== undefined ? p.inStock : true })));
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   const products = useMemo(() => {
-    let list = PRODUCTS;
+    let list = productsList;
     if (category !== "all") list = list.filter((p) => p.category === category);
     if (query) list = list.filter((p) => p.name.toLowerCase().includes(query.toLowerCase()));
     if (sort === "price-asc") list = [...list].sort((a, b) => a.retailPrice - b.retailPrice);
     if (sort === "price-desc") list = [...list].sort((a, b) => b.retailPrice - a.retailPrice);
     return list;
-  }, [category, query, sort]);
+  }, [category, query, sort, productsList]);
+
+  if (loading) {
+    return (
+      <main className="pt-32 pb-24 min-h-screen bg-[#FAF8F5] flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-[#1A2F24] border-t-transparent rounded-full animate-spin" />
+      </main>
+    );
+  }
 
   return (
     <main data-testid="catalog-page" className="pt-32 pb-24 min-h-screen bg-[#FAF8F5]">
@@ -75,9 +102,16 @@ export default function Catalog() {
         <div data-testid="catalog-grid" className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-14">
           {products.map((p, i) => (
             <Reveal key={p.id} delay={(i % 6) * 0.05}>
-              <Link to={`/product/${p.id}`} data-testid={`catalog-product-${p.id}`} className="group block">
-                <div className="aspect-[4/5] overflow-hidden bg-[#E5E0D8]">
-                  <img src={p.image} alt={p.name} className="w-full h-full object-cover transition-transform duration-[1.4s] ease-out group-hover:scale-105" />
+              <Link to={`/product/${p.id}`} data-testid={`catalog-product-${p.id}`} className={`group block ${!p.inStock ? 'opacity-70' : ''}`}>
+                <div className="aspect-[4/5] overflow-hidden bg-[#E5E0D8] relative">
+                  <img src={p.image} alt={p.name} className={`w-full h-full object-cover transition-transform duration-[1.4s] ease-out group-hover:scale-105 ${!p.inStock ? 'opacity-40 grayscale-[40%]' : ''}`} />
+                  {!p.inStock && (
+                    <div className="absolute inset-0 bg-[#1A2F24]/30 backdrop-blur-[1px] flex items-center justify-center">
+                      <span className="bg-[#8C2131] text-[#FAF8F5] text-xs uppercase tracking-widest px-4 py-2 rounded-full font-semibold shadow-md">
+                        Out of Stock
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <div className="mt-5">
                   <div className="text-xs uppercase tracking-[0.2em] text-[#5C7065]">{p.season} · {p.color}</div>

@@ -13,6 +13,7 @@ import About from "@/pages/About";
 import Contact from "@/pages/Contact";
 import Cart from "@/pages/Cart";
 import Auth from "@/pages/Auth";
+import AdminDashboard from "@/pages/AdminDashboard";
 import { Toaster } from "@/components/ui/sonner";
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
               <Route path="/contact" element={<Contact />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/login" element={<Auth />} />
+              <Route path="/admin" element={<AdminDashboard />} />
             </Routes>
             <Footer />
           </SmoothScroll>

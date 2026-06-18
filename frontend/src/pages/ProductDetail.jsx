@@ -1,18 +1,44 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { getProductById, PRODUCTS } from "@/lib/data";
 import { useCart } from "@/lib/CartContext";
 import { Reveal } from "@/components/ScrollReveal";
 import { Minus, Plus, ArrowUpRight, Truck, Leaf, Snowflake } from "lucide-react";
 import { toast } from "sonner";
+import axios from "axios";
 
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const product = getProductById(id);
   const { addItem } = useCart();
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [qty, setQty] = useState(1);
   const [mode, setMode] = useState("retail");
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL || "http://localhost:5000"}/api/products/${id}`);
+        setProduct(response.data);
+      } catch (err) {
+        console.error("Error fetching product details:", err);
+        const staticProd = getProductById(id);
+        setProduct(staticProd ? { ...staticProd, inStock: staticProd.inStock !== undefined ? staticProd.inStock : true } : null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProduct();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <main className="pt-32 pb-32 min-h-screen bg-[#FAF8F5] flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-[#1A2F24] border-t-transparent rounded-full animate-spin" />
+      </main>
+    );
+  }
 
   if (!product) {
     return (
@@ -32,6 +58,10 @@ export default function ProductDetail() {
   const related = PRODUCTS.filter((p) => p.category === product.category && p.id !== product.id).slice(0, 3);
 
   const handleAdd = () => {
+    if (!product.inStock) {
+      toast.error("This item is currently out of stock.");
+      return;
+    }
     if (!meetsMin) {
       toast.error(`Wholesale minimum is ${product.minWholesale} ${product.unit.startsWith("kil") ? "kg" : "units"}`);
       return;
@@ -49,8 +79,15 @@ export default function ProductDetail() {
 
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
           <Reveal>
-            <div className="aspect-[4/5] overflow-hidden bg-[#E5E0D8]">
-              <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+            <div className="aspect-[4/5] overflow-hidden bg-[#E5E0D8] relative">
+              <img src={product.image} alt={product.name} className={`w-full h-full object-cover ${!product.inStock ? 'opacity-50 grayscale-[35%]' : ''}`} />
+              {!product.inStock && (
+                <div className="absolute inset-0 bg-[#1A2F24]/30 backdrop-blur-[1px] flex items-center justify-center">
+                  <span className="bg-[#8C2131] text-[#FAF8F5] text-sm uppercase tracking-widest px-6 py-3 rounded-full font-semibold shadow-lg">
+                    Out of Stock
+                  </span>
+                </div>
+              )}
             </div>
           </Reveal>
 
@@ -59,10 +96,17 @@ export default function ProductDetail() {
             <h1 className="font-serif-display text-5xl md:text-7xl leading-none mt-3">{product.name}</h1>
             <p className="mt-6 text-[#1A2F24]/85 leading-relaxed text-lg">{product.description}</p>
 
+            {!product.inStock && (
+              <div className="mt-6 bg-[#8C2131]/10 text-[#8C2131] border border-[#8C2131]/20 rounded-2xl p-5 text-sm leading-relaxed font-medium">
+                This item is temporarily out of stock. You can still request a custom quote or contact our sales team for seasonal restock timelines.
+              </div>
+            )}
+
             {/* Mode toggle */}
-            <div data-testid="pricing-mode-toggle" className="mt-10 inline-flex bg-white border border-[#E5E0D8] rounded-full p-1">
+            <div data-testid="pricing-mode-toggle" className={`mt-10 inline-flex bg-white border border-[#E5E0D8] rounded-full p-1 ${!product.inStock ? 'opacity-50 pointer-events-none' : ''}`}>
               <button
                 data-testid="mode-retail"
+                disabled={!product.inStock}
                 onClick={() => setMode("retail")}
                 className={`px-5 py-2 rounded-full text-sm transition-colors ${mode === "retail" ? "bg-[#1A2F24] text-[#FAF8F5]" : "text-[#1A2F24]"}`}
               >
@@ -70,6 +114,7 @@ export default function ProductDetail() {
               </button>
               <button
                 data-testid="mode-wholesale"
+                disabled={!product.inStock}
                 onClick={() => { setMode("wholesale"); setQty(product.minWholesale); }}
                 className={`px-5 py-2 rounded-full text-sm transition-colors ${mode === "wholesale" ? "bg-[#1A2F24] text-[#FAF8F5]" : "text-[#1A2F24]"}`}
               >
@@ -92,27 +137,32 @@ export default function ProductDetail() {
             </div>
 
             {/* Quantity */}
-            <div className="mt-8 flex items-center gap-6">
+            <div className={`mt-8 flex items-center gap-6 ${!product.inStock ? 'opacity-50 pointer-events-none' : ''}`}>
               <div className="text-xs uppercase tracking-[0.2em] text-[#5C7065]">Quantity</div>
               <div className="inline-flex items-center border border-[#1A2F24] rounded-full">
-                <button data-testid="qty-decrement" onClick={() => setQty((q) => Math.max(1, q - 1))} className="w-11 h-11 inline-flex items-center justify-center">
+                <button data-testid="qty-decrement" disabled={!product.inStock} onClick={() => setQty((q) => Math.max(1, q - 1))} className="w-11 h-11 inline-flex items-center justify-center">
                   <Minus size={16} />
                 </button>
-                <input data-testid="qty-input" type="number" min={1} value={qty} onChange={(e) => setQty(Math.max(1, parseInt(e.target.value || "1")))} className="w-16 text-center bg-transparent outline-none" />
-                <button data-testid="qty-increment" onClick={() => setQty((q) => q + 1)} className="w-11 h-11 inline-flex items-center justify-center">
+                <input data-testid="qty-input" disabled={!product.inStock} type="number" min={1} value={qty} onChange={(e) => setQty(Math.max(1, parseInt(e.target.value || "1")))} className="w-16 text-center bg-transparent outline-none" />
+                <button data-testid="qty-increment" disabled={!product.inStock} onClick={() => setQty((q) => q + 1)} className="w-11 h-11 inline-flex items-center justify-center">
                   <Plus size={16} />
                 </button>
               </div>
               <div className="text-sm text-[#5C7065]">Subtotal: <span className="font-serif-display text-lg text-[#1A2F24]">₹{total.toLocaleString("en-IN")}</span></div>
             </div>
-            {!meetsMin && (
+            {isWholesale && !meetsMin && product.inStock && (
               <div data-testid="min-order-warning" className="mt-3 text-sm text-[#8C2131]">Wholesale requires minimum {product.minWholesale} units.</div>
             )}
 
             {/* Actions */}
             <div className="mt-10 flex flex-wrap gap-4">
-              <button data-testid="add-to-cart-button" onClick={handleAdd} className="inline-flex items-center gap-2 rounded-full bg-[#1A2F24] text-[#FAF8F5] px-8 py-4 text-sm tracking-wide hover:bg-[#2C4A3A] transition-colors">
-                Add to Cart <ArrowUpRight size={16} />
+              <button 
+                data-testid="add-to-cart-button" 
+                onClick={handleAdd} 
+                disabled={!product.inStock} 
+                className="inline-flex items-center gap-2 rounded-full bg-[#1A2F24] text-[#FAF8F5] px-8 py-4 text-sm tracking-wide hover:bg-[#2C4A3A] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {product.inStock ? "Add to Cart" : "Out of Stock"} <ArrowUpRight size={16} />
               </button>
               <Link to="/quote" data-testid="request-quote-link" className="inline-flex items-center gap-2 rounded-full border border-[#1A2F24] text-[#1A2F24] px-8 py-4 text-sm tracking-wide hover:bg-[#1A2F24] hover:text-[#FAF8F5] transition-colors">
                 Request Custom Quote

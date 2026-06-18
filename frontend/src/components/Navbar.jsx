@@ -65,6 +65,13 @@ export default function Navbar() {
 
   const isDarkBgPage = location.pathname === "/login";
 
+  const activeLinks = [...links];
+  if (user && user.role === 'admin') {
+    if (!activeLinks.some(l => l.to === '/admin')) {
+      activeLinks.push({ to: '/admin', label: 'Admin Dashboard' });
+    }
+  }
+
   return (
     <header
       data-testid="site-navbar"
@@ -89,7 +96,7 @@ export default function Navbar() {
         </Link>
 
         <nav className="hidden lg:flex items-center gap-8">
-          {links.map((l) => (
+          {activeLinks.map((l) => (
             <NavLink
               key={l.to}
               to={l.to}
@@ -174,7 +181,7 @@ export default function Navbar() {
             className="lg:hidden bg-[#FAF8F5] border-t border-[#E5E0D8] overflow-hidden"
           >
             <nav className="px-6 py-6 flex flex-col gap-4">
-              {links.map((l) => (
+              {activeLinks.map((l) => (
                 <NavLink
                   key={l.to}
                   to={l.to}

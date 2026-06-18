@@ -3,6 +3,7 @@ const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const { supabaseAdmin } = require('../config/supabase');
 const crypto = require('crypto');
+const { authenticateToken, requireAdmin } = require('../middleware/auth');
 
 const validateContact = [
   body('name').notEmpty().withMessage('Name is required'),
@@ -59,7 +60,7 @@ router.post('/', validateContact, async (req, res) => {
 
 // @route   GET /api/contact
 // @desc    Get all contact messages
-router.get('/', async (req, res) => {
+router.get('/', authenticateToken, requireAdmin, async (req, res) => {
   try {
     const { data: contacts, error } = await supabaseAdmin
       .from('contact_messages')

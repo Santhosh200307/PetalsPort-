@@ -3,6 +3,7 @@ const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const { supabaseAdmin } = require('../config/supabase');
 const crypto = require('crypto');
+const { authenticateToken, requireAdmin } = require('../middleware/auth');
 
 const validateQuote = [
   body('name').notEmpty().withMessage('Name is required'),
@@ -69,7 +70,7 @@ router.post('/', validateQuote, async (req, res) => {
 
 // @route   GET /api/quotes (also maps to /api/quote-request)
 // @desc    Get all quote requests
-router.get('/', async (req, res) => {
+router.get('/', authenticateToken, requireAdmin, async (req, res) => {
   try {
     const { data: quotes, error } = await supabaseAdmin
       .from('quotes')

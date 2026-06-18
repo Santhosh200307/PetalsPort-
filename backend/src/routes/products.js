@@ -29,6 +29,7 @@ function formatProduct(dbProduct) {
     minWholesale: Number(dbProduct.min_wholesale),
     image: dbProduct.image,
     description: dbProduct.description,
+    inStock: dbProduct.in_stock !== undefined ? Boolean(dbProduct.in_stock) : true,
     createdAt: dbProduct.created_at
   };
 }
@@ -45,7 +46,8 @@ function toDbProduct(jsProduct) {
     wholesale_price: jsProduct.wholesalePrice,
     min_wholesale: jsProduct.minWholesale,
     image: jsProduct.image,
-    description: jsProduct.description
+    description: jsProduct.description,
+    in_stock: jsProduct.inStock !== undefined ? Boolean(jsProduct.inStock) : true
   };
 }
 
@@ -87,7 +89,7 @@ router.get('/', async (req, res) => {
       if (category && category !== 'all') {
         filtered = STATIC_PRODUCTS.filter(p => p.category === category);
       }
-      return res.json(filtered);
+      return res.json(filtered.map(p => ({ ...p, inStock: p.inStock !== undefined ? p.inStock : true })));
     }
     
     res.json(dbProducts.map(p => formatProduct(p)));
@@ -112,7 +114,7 @@ router.get('/:id', async (req, res) => {
     if (error || !dbProduct) {
       const staticProd = STATIC_PRODUCTS.find(p => p.id === id);
       if (staticProd) {
-        return res.json(staticProd);
+        return res.json({ ...staticProd, inStock: staticProd.inStock !== undefined ? staticProd.inStock : true });
       }
       return res.status(404).json({ error: 'Product not found' });
     }
@@ -127,7 +129,7 @@ router.get('/:id', async (req, res) => {
 // @route   POST /api/products
 // @desc    Create a product (Admin only)
 router.post('/', authenticateToken, requireAdmin, async (req, res) => {
-  const { id, name, category, color, season, unit, retailPrice, wholesalePrice, minWholesale, image, description } = req.body;
+  const { id, name, category, color, season, unit, retailPrice, wholesalePrice, minWholesale, image, description, inStock = true } = req.body;
   
   if (!id || !name || !category || retailPrice === undefined || wholesalePrice === undefined || minWholesale === undefined) {
     return res.status(400).json({ error: 'Missing required fields' });
@@ -145,7 +147,8 @@ router.post('/', authenticateToken, requireAdmin, async (req, res) => {
       wholesale_price: wholesalePrice,
       min_wholesale: minWholesale,
       image,
-      description
+      description,
+      in_stock: Boolean(inStock)
     };
     
     const { data, error } = await supabaseAdmin
@@ -181,6 +184,7 @@ router.put('/:id', authenticateToken, requireAdmin, async (req, res) => {
     if (updates.minWholesale !== undefined) dbUpdates.min_wholesale = updates.minWholesale;
     if (updates.image !== undefined) dbUpdates.image = updates.image;
     if (updates.description !== undefined) dbUpdates.description = updates.description;
+    if (updates.inStock !== undefined) dbUpdates.in_stock = Boolean(updates.inStock);
     
     const { data, error } = await supabaseAdmin
       .from('products')

@@ -7,6 +7,37 @@ const { supabaseAdmin } = require('../config/supabase');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'petalsport_jwt_secret_key_2026';
 
+const seedAdminUser = async () => {
+  try {
+    const { data: adminExists, error } = await supabaseAdmin
+      .from('users')
+      .select('*')
+      .eq('email', 'admin@petalsport.in')
+      .maybeSingle();
+    
+    if (error && error.code !== 'PGRST116') {
+      console.warn('Checking admin existence failed:', error.message);
+      return;
+    }
+
+    if (!adminExists) {
+      console.log('Seeding default admin user (admin@petalsport.in)...');
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash('adminpassword123', salt);
+      await supabaseAdmin.from('users').insert([{
+        email: 'admin@petalsport.in',
+        password: hashedPassword,
+        role: 'admin'
+      }]);
+      console.log('Default admin user seeded.');
+    }
+  } catch (err) {
+    console.warn('Seeding admin user failed:', err.message);
+  }
+};
+
+seedAdminUser();
+
 // @route   POST /api/auth/register
 // @desc    Register a new user
 router.post(
