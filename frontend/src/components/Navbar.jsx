@@ -63,6 +63,8 @@ export default function Navbar() {
     setOpen(false);
   }, [location.pathname]);
 
+  const isDarkBgPage = location.pathname === "/login";
+
   return (
     <header
       data-testid="site-navbar"
@@ -74,14 +76,14 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between h-20">
         <Link to="/" data-testid="logo-link" className="flex items-center gap-2 group">
-          <svg width="28" height="28" viewBox="0 0 28 28" className="text-[#1A2F24] transition-transform duration-700 group-hover:rotate-45">
+          <svg width="28" height="28" viewBox="0 0 28 28" className={`transition-transform duration-700 group-hover:rotate-45 ${!scrolled && isDarkBgPage ? "text-[#FAF8F5]" : "text-[#1A2F24]"}`}>
             <circle cx="14" cy="6" r="4" fill="currentColor" opacity="0.85"/>
             <circle cx="22" cy="14" r="4" fill="currentColor" opacity="0.7"/>
             <circle cx="14" cy="22" r="4" fill="currentColor" opacity="0.85"/>
             <circle cx="6" cy="14" r="4" fill="currentColor" opacity="0.7"/>
             <circle cx="14" cy="14" r="3" fill="#8C2131"/>
           </svg>
-          <span className="font-serif-display text-2xl tracking-tight text-[#1A2F24] leading-none">
+          <span className={`font-serif-display text-2xl tracking-tight leading-none ${!scrolled && isDarkBgPage ? "text-[#FAF8F5]" : "text-[#1A2F24]"}`}>
             Petals<span className="italic text-[#8C2131]">Port</span>
           </span>
         </Link>
@@ -94,7 +96,9 @@ export default function Navbar() {
               data-testid={`nav-link-${l.label.toLowerCase().replace(" ", "-")}`}
               className={({ isActive }) =>
                 `text-sm tracking-wide transition-colors duration-300 hover:text-[#8C2131] ${
-                  isActive ? "text-[#8C2131]" : "text-[#1A2F24]"
+                  isActive 
+                    ? "text-[#8C2131]" 
+                    : (!scrolled && isDarkBgPage ? "text-[#FAF8F5]" : "text-[#1A2F24]")
                 }`
               }
               end={l.to === "/"}
@@ -114,7 +118,7 @@ export default function Navbar() {
               <button
                 onClick={handleLogout}
                 data-testid="logout-button"
-                className="inline-flex items-center justify-center w-11 h-11 rounded-full border border-[#8C2131]/40 text-[#8C2131] hover:bg-[#8C2131] hover:text-[#FAF8F5] transition-colors duration-300"
+                className={`inline-flex items-center justify-center w-11 h-11 rounded-full border transition-colors duration-300 ${!scrolled && isDarkBgPage ? "border-[#FAF8F5] text-[#FAF8F5] hover:bg-[#FAF8F5] hover:text-[#1A2F24]" : "border-[#8C2131]/40 text-[#8C2131] hover:bg-[#8C2131] hover:text-[#FAF8F5]"}`}
                 aria-label="Sign Out"
                 title="Sign Out"
               >
@@ -125,7 +129,7 @@ export default function Navbar() {
             <Link
               to="/login"
               data-testid="login-link"
-              className="hidden lg:inline-flex items-center justify-center w-11 h-11 rounded-full border border-[#1A2F24] text-[#1A2F24] hover:bg-[#1A2F24] hover:text-[#FAF8F5] transition-colors duration-300"
+              className={`hidden lg:inline-flex items-center justify-center w-11 h-11 rounded-full border transition-colors duration-300 ${!scrolled && isDarkBgPage ? "border-[#FAF8F5] text-[#FAF8F5] hover:bg-[#FAF8F5] hover:text-[#1A2F24]" : "border-[#1A2F24] text-[#1A2F24] hover:bg-[#1A2F24] hover:text-[#FAF8F5]"}`}
               aria-label="Sign In"
               title="Sign In"
             >
@@ -136,7 +140,7 @@ export default function Navbar() {
           <Link
             to="/cart"
             data-testid="nav-cart-link"
-            className="relative inline-flex items-center justify-center w-11 h-11 rounded-full border border-[#1A2F24] text-[#1A2F24] hover:bg-[#1A2F24] hover:text-[#FAF8F5] transition-colors duration-300"
+            className={`relative inline-flex items-center justify-center w-11 h-11 rounded-full border transition-colors duration-300 ${!scrolled && isDarkBgPage ? "border-[#FAF8F5] text-[#FAF8F5] hover:bg-[#FAF8F5] hover:text-[#1A2F24]" : "border-[#1A2F24] text-[#1A2F24] hover:bg-[#1A2F24] hover:text-[#FAF8F5]"}`}
             aria-label="Open cart"
           >
             <ShoppingBag size={18} />
@@ -151,7 +155,7 @@ export default function Navbar() {
           </Link>
           <button
             data-testid="mobile-menu-toggle"
-            className="lg:hidden inline-flex items-center justify-center w-11 h-11 rounded-full border border-[#1A2F24]"
+            className={`lg:hidden inline-flex items-center justify-center w-11 h-11 rounded-full border transition-colors duration-300 ${!scrolled && isDarkBgPage ? "border-[#FAF8F5] text-[#FAF8F5] hover:bg-[#FAF8F5] hover:text-[#1A2F24]" : "border-[#1A2F24] text-[#1A2F24] hover:bg-[#1A2F24] hover:text-[#FAF8F5]"}`}
             onClick={() => setOpen((o) => !o)}
             aria-label="Toggle menu"
           >

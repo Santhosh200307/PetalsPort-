@@ -86,7 +86,7 @@ export default function Auth() {
         <img 
           src={FLORAL_IMAGE} 
           alt="Full screen Floral Background" 
-          className="w-full h-full object-cover opacity-[0.20]"
+          className="w-full h-full object-cover opacity-[0.04]"
         />
         {/* Soft dark vignette filter for contrast */}
         <div className="absolute inset-0 bg-[#1A2F24]/40 backdrop-blur-[1px]" />
